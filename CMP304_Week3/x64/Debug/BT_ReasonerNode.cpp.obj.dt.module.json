@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "x64\\Debug\\BT_ReasonerNode.obj",
+            "outputs": [
+                "x64\\Debug\\BT_ReasonerNode.cpp.obj.dt.module.json",
+                "x64\\Debug\\BT_ReasonerNode.cpp.obj.dt.d.json"
+            ],
+            "requires": []
+        }
+    ]
+}

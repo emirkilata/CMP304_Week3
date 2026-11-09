@@ -1,0 +1,21 @@
+﻿  pch.cpp
+  AIAction.cpp
+  AIActionSubReasoner.cpp
+  AIActionBase.cpp
+  AIActorBase.cpp
+  AIBrainBase.cpp
+  AIBrainBlackboardBase.cpp
+  AIConsiderationBase.cpp
+  AIConstructorBase.cpp
+  AIOptionBase.cpp
+  AIReasonerBase.cpp
+  AI_Framework.cpp
+  AIBrainBlackboard.cpp
+  AIConsideration.cpp
+  AIBlackboard_Global.cpp
+  AILogger_Global.cpp
+  AIMath_Global.cpp
+  AIRandom_Global.cpp
+  AIOption.cpp
+  Generating Code...
+  AI_Framework.vcxproj -> C:\Dev\C++\CMP304_26_27\WeeklyLabs\MLS Projects\Behaviour Trees - C++\CMP304_Week3\x64\Debug\AI_Framework.lib

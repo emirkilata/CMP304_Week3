@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "x64\\Debug\\AIBrainBlackboardBase.obj",
+            "outputs": [
+                "x64\\Debug\\AIBrainBlackboardBase.h.obj.dt.module.json",
+                "x64\\Debug\\AIBrainBlackboardBase.h.obj.dt.d.json"
+            ],
+            "requires": []
+        }
+    ]
+}
