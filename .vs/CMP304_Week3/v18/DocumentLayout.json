@@ -7,6 +7,10 @@
       "RelativeMoniker": "D:0:0:{D1961ABE-3ED6-49BD-ADFA-68238A8225DD}|CMP304_Week3\\CMP304_Week3.vcxproj|solutionrelative:CMP304_Week3\\AIConstructor_BT.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{D1961ABE-3ED6-49BD-ADFA-68238A8225DD}|CMP304_Week3\\CMP304_Week3.vcxproj|C:\\Users\\emira\\Downloads\\Behaviour Trees - C\u002B\u002B\\Behaviour Trees - C\u002B\u002B\\CMP304_Week3\\CMP304_Week3\\AIActor_Guard.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{D1961ABE-3ED6-49BD-ADFA-68238A8225DD}|CMP304_Week3\\CMP304_Week3.vcxproj|solutionrelative:CMP304_Week3\\AIActor_Guard.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{D1961ABE-3ED6-49BD-ADFA-68238A8225DD}|CMP304_Week3\\CMP304_Week3.vcxproj|C:\\Users\\emira\\Downloads\\Behaviour Trees - C\u002B\u002B\\Behaviour Trees - C\u002B\u002B\\CMP304_Week3\\CMP304_Week3\\BT_SequenceNode.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{D1961ABE-3ED6-49BD-ADFA-68238A8225DD}|CMP304_Week3\\CMP304_Week3.vcxproj|solutionrelative:CMP304_Week3\\BT_SequenceNode.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
@@ -18,8 +22,21 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AIActor_Guard.cpp",
+              "DocumentMoniker": "C:\\Users\\emira\\Downloads\\Behaviour Trees - C\u002B\u002B\\Behaviour Trees - C\u002B\u002B\\CMP304_Week3\\CMP304_Week3\\AIActor_Guard.cpp",
+              "RelativeDocumentMoniker": "CMP304_Week3\\AIActor_Guard.cpp",
+              "ToolTip": "C:\\Users\\emira\\Downloads\\Behaviour Trees - C\u002B\u002B\\Behaviour Trees - C\u002B\u002B\\CMP304_Week3\\CMP304_Week3\\AIActor_Guard.cpp",
+              "RelativeToolTip": "CMP304_Week3\\AIActor_Guard.cpp",
+              "ViewState": "AgIAACQAAAAAAAAAAAAAADcAAABLAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-11-09T17:25:10.844Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -28,14 +45,14 @@
               "RelativeDocumentMoniker": "CMP304_Week3\\AIConstructor_BT.cpp",
               "ToolTip": "C:\\Users\\emira\\Downloads\\Behaviour Trees - C\u002B\u002B\\Behaviour Trees - C\u002B\u002B\\CMP304_Week3\\CMP304_Week3\\AIConstructor_BT.cpp",
               "RelativeToolTip": "CMP304_Week3\\AIConstructor_BT.cpp",
-              "ViewState": "AgIAAOkAAAAAAAAAAAAYwAkBAAA4AAAAAAAAAA==",
+              "ViewState": "AgIAAAgBAAAAAAAAAAAYwBUBAABAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-11-09T16:35:12.015Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "BT_SequenceNode.cpp",
               "DocumentMoniker": "C:\\Users\\emira\\Downloads\\Behaviour Trees - C\u002B\u002B\\Behaviour Trees - C\u002B\u002B\\CMP304_Week3\\CMP304_Week3\\BT_SequenceNode.cpp",
               "RelativeDocumentMoniker": "CMP304_Week3\\BT_SequenceNode.cpp",

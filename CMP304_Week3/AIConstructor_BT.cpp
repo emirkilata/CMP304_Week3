@@ -110,6 +110,13 @@ void AIConstructor_BT::DefineActions()
 
 	AddActionByName("ActionRaiseAlarm", raiseAlarmFunction);
 
+	auto sprintFunction = [](AIBrainBlackboardBase& bb) -> ActionStatus
+		{
+			AIActor_Guard* actor = static_cast<AIActor_Guard*>(bb.GetActorContext());
+			return actor->Sprint();
+		};
+
+	AddActionByName("ActionSprint", sprintFunction);
 }
 
 void AIConstructor_BT::DefineConsiderations()
@@ -173,6 +180,12 @@ void AIConstructor_BT::DefineConsiderations()
 
 	AddConsiderationByName("ConsiderationShouldRaiseAlarm", cShouldRaiseAlarm);
 	
+	auto cCanSprint = [](AIBrainBlackboardBase& bb) -> bool
+		{
+			return bb.GetValue<float>("Energy") >= 10.0f;
+		};
+
+	AddConsiderationByName("ConsiderationCanSprint", cCanSprint);
 }
 
 
@@ -198,6 +211,7 @@ void AIConstructor_BT::DefineOptions()
 	AddOptionByName("OptionInvestigate", "ActionInvestigate");
 	AddOptionByName("OptionGetAlarmPath", "ActionGetAlarmPath");
 	AddOptionByName("OptionRaiseAlarm", "ActionRaiseAlarm");
+	AddOptionByName("OptionSprint", "ActionSprint");
 
 
 
@@ -217,7 +231,11 @@ void AIConstructor_BT::DefineOptions()
 	AddControlNodeByName("OptionInvestigateDecorator", AIReasonerBase::Decorator);
 	AddControlNodeByName("OptionAlarmSeq", AIReasonerBase::Sequence);
 	AddControlNodeByName("OptionAlarmDecorator", AIReasonerBase::Decorator);
-
+	AddControlNodeByName("OptionSprintSeq", AIReasonerBase::Sequence);
+	AddControlNodeByName("OptionSprintDecorator", AIReasonerBase::Decorator);
+	AddControlNodeByName("OptionNormalChaseSeq", AIReasonerBase::Sequence);
+	AddControlNodeByName("OptionPursuitFallback", AIReasonerBase::Fallback);
+	
 
 	AddDecoratorConsideration("OptionRestDecorator", "ConsiderationNeedsRest");
 	AddOptionConsideration("OptionPatrol", "ConsiderationHasEnergy");
@@ -231,6 +249,9 @@ void AIConstructor_BT::DefineOptions()
 	AddOptionConsideration("OptionPatrol", "ConsiderationCannotHearPlayer");
 	AddDecoratorConsideration("OptionAlarmDecorator", "ConsiderationShouldRaiseAlarm");
 	AddOptionConsideration("OptionRaiseAlarm", "ConsiderationHasEnergy");
+	AddDecoratorConsideration("OptionSprintDecorator", "ConsiderationCanSprint");
+	AddOptionConsideration("OptionSprint", "ConsiderationCanSprint");
+	AddOptionConsideration("OptionSprint", "ConsiderationSeePlayer");
 
 
 
@@ -254,7 +275,18 @@ void AIConstructor_BT::DefineOptions()
 
 	// Chase sequence.
 	AddOptionToTreeNode("OptionChaseSeq", "OptionChaseDecorator");
-	AddOptionToTreeNode("OptionChaseSeq", "OptionChase");
+	AddOptionToTreeNode("OptionChaseSeq", "OptionPursuitFallback");
+
+	// Pursuit fallback: sprint first, normal chase second.
+	AddOptionToTreeNode("OptionPursuitFallback", "OptionSprintSeq");
+	AddOptionToTreeNode("OptionPursuitFallback", "OptionNormalChaseSeq");
+
+	// Normal chase sequence.
+	AddOptionToTreeNode("OptionNormalChaseSeq", "OptionChase");
+
+	// Sprint sequence.
+	AddOptionToTreeNode("OptionSprintSeq", "OptionSprintDecorator");
+	AddOptionToTreeNode("OptionSprintSeq", "OptionSprint");
 
 	// Investigate sequence.
 	AddOptionToTreeNode("OptionInvestigateSeq", "OptionInvestigateDecorator");

@@ -53,7 +53,7 @@ void AIActor_Guard::Update(float _dt)
 
 
 	// if the guard is moving, update movement status
-	if (guardState == GuardState::Moving)
+	if (guardState == GuardState::Moving || guardState == GuardState::Running)
 	{
 		// if reached current destination
 		if (movePoint >= 1)
