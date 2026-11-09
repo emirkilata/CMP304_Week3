@@ -73,28 +73,53 @@ ActionStatus BT_SequenceNode::Act()
 		{
 
 
-			
+			ActionStatus _actionResult =
+				selectedOption->GetOptionAction()->PerformAction(*actorBlackboard);
 
-			// TASK TODO
-			//  - implement the logic for the Sequence Selector
-			//  - it should maintain the index of the running child node (runningOptionIndex)
-			//  - it should handle when the child nodes report Success or Failiure
-			//  - use BT_FallbackNode::Act() as a guide
-		
+			if (_actionResult == ActionStatus::ACTION_SUCCESS)
+			{
+				if (runningOptionIndex == options.size() - 1)
+				{
+					std::cout
+						<< "[" << actorBlackboard->GetActorContext()->GetActorID()
+						<< "] BT Log: Sequence Node "
+						<< reasonerID
+						<< " Complete - Success"
+						<< std::endl;
 
-			//	# PSEUDOCODE
-			//  
-			// 	Get Current Child Node Status
-			//	
-			//  IF Current Child Node = SUCCESS:
-			//		IF Current Child = Last Child:
-			//			Status = SUCCESS
-			//		ELSE:
-			//			Move to next Child Node
-			//	ELSE IF Current Child Node = FAILURE
-			//		Status = FAILURE
-			//	ELSE IF Current Child Node = RUNNING
-			//		Status = RUNNING
+					SetStatus(ActionStatus::ACTION_SUCCESS);
+				}
+				else
+				{
+					runningOptionIndex++;
+
+					std::cout
+						<< "[" << actorBlackboard->GetActorContext()->GetActorID()
+						<< "] BT Log: Sequence Node "
+						<< reasonerID
+						<< " moving to child index "
+						<< runningOptionIndex
+						<< std::endl;
+
+					SetStatus(ActionStatus::ACTION_RUNNING);
+				}
+			}
+			else if (_actionResult == ActionStatus::ACTION_FAILURE)
+			{
+				std::cout
+					<< "[" << actorBlackboard->GetActorContext()->GetActorID()
+					<< "] BT Log: Sequence Node "
+					<< reasonerID
+					<< " failed because of "
+					<< selectedOption->GetOptionID()
+					<< std::endl;
+
+				SetStatus(ActionStatus::ACTION_FAILURE);
+			}
+			else if (_actionResult == ActionStatus::ACTION_RUNNING)
+			{
+				SetStatus(ActionStatus::ACTION_RUNNING);
+			}
 
 	
 
