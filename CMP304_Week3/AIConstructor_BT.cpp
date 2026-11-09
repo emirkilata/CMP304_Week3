@@ -55,11 +55,43 @@ void AIConstructor_BT::DefineActions()
 
 
 
-	// TASK TODO - Add Additional Actions
+	auto restFunction = [](AIBrainBlackboardBase& bb) -> ActionStatus
+		{
+			AIActor_Guard* actor =
+				static_cast<AIActor_Guard*>(bb.GetActorContext());
+
+			return actor->Rest();
+		};
+
+	AddActionByName("ActionRest", restFunction);
 
 
 
+	auto chaseFunction = [](AIBrainBlackboardBase& bb) -> ActionStatus
+		{
+			AIActor_Guard* actor = static_cast<AIActor_Guard*>(bb.GetActorContext());
+			return actor->Chase();
+		};
 
+	AddActionByName("ActionChase", chaseFunction);
+
+
+
+	auto getInvestigatePathFunction = [](AIBrainBlackboardBase& bb) -> ActionStatus
+		{
+			AIActor_Guard* actor = static_cast<AIActor_Guard*>(bb.GetActorContext());
+			return actor->GetInvestigatePath();
+		};
+
+	AddActionByName("ActionGetInvestigatePath", getInvestigatePathFunction);
+
+	auto investigateFunction = [](AIBrainBlackboardBase& bb) -> ActionStatus
+		{
+			AIActor_Guard* actor = static_cast<AIActor_Guard*>(bb.GetActorContext());
+			return actor->Investigate();
+		};
+
+	AddActionByName("ActionInvestigate", investigateFunction);
 
 }
 
@@ -77,7 +109,41 @@ void AIConstructor_BT::DefineConsiderations()
 	AddConsiderationByName("ConsiderationSeePlayer", cCanSeeEnemy);
 
 
-	// TASK TODO - Add Additional Considerations
+	auto cNeedsRest = [](AIBrainBlackboardBase& bb) -> bool
+		{
+			return bb.GetValue<float>("Energy") <= 0.0f;
+		};
+
+	AddConsiderationByName("ConsiderationNeedsRest", cNeedsRest);
+
+	auto cHasEnergy = [](AIBrainBlackboardBase& bb) -> bool
+		{
+			return bb.GetValue<float>("Energy") > 0.0f;
+		};
+
+	AddConsiderationByName("ConsiderationHasEnergy", cHasEnergy);
+
+
+	auto cCannotSeePlayer = [](AIBrainBlackboardBase& bb) -> bool
+		{
+			return bb.GetValue<int>("CanSeePlayer") == 0;
+		};
+
+	AddConsiderationByName("ConsiderationCannotSeePlayer", cCannotSeePlayer);
+
+	auto cCanHearPlayer = [](AIBrainBlackboardBase& bb) -> bool
+		{
+			return bb.GetValue<int>("CanHearPlayer") == 1;
+		};
+
+	AddConsiderationByName("ConsiderationHearPlayer", cCanHearPlayer);
+
+	auto cCannotHearPlayer = [](AIBrainBlackboardBase& bb) -> bool
+		{
+			return bb.GetValue<int>("CanHearPlayer") == 0;
+		};
+
+	AddConsiderationByName("ConsiderationCannotHearPlayer", cCannotHearPlayer);
 	
 }
 
@@ -98,6 +164,10 @@ void AIConstructor_BT::DefineOptions()
 
 	AddOptionByName("OptionGetPatrolPath", "ActionGetPatrolPath");
 	AddOptionByName("OptionPatrol", "ActionPatrol");
+	AddOptionByName("OptionRest", "ActionRest");
+	AddOptionByName("OptionChase", "ActionChase");
+	AddOptionByName("OptionGetInvestigatePath", "ActionGetInvestigatePath");
+	AddOptionByName("OptionInvestigate", "ActionInvestigate");
 
 
 
@@ -110,23 +180,52 @@ void AIConstructor_BT::DefineOptions()
 	// You do not need to create the Root, that node is already created (called "Root")
 
 	AddControlNodeByName("OptionPatrolSeq", AIReasonerBase::Sequence);
+	AddControlNodeByName("OptionRestSeq", AIReasonerBase::Sequence);
+	AddControlNodeByName("OptionRestDecorator", AIReasonerBase::Decorator);
+	AddControlNodeByName("OptionChaseSeq", AIReasonerBase::Sequence);
+	AddControlNodeByName("OptionChaseDecorator", AIReasonerBase::Decorator);
+	AddControlNodeByName("OptionInvestigateSeq", AIReasonerBase::Sequence);
+	AddControlNodeByName("OptionInvestigateDecorator", AIReasonerBase::Decorator);
 
 
 
-	// - CONSIDERATIONS - 
-	// Add any considerations to Decorators using AddDecoratorConsideration()
-	// Add any considerations to Leaf nodes using AddOptionConsideration()
+	AddDecoratorConsideration("OptionRestDecorator", "ConsiderationNeedsRest");
+	AddOptionConsideration("OptionPatrol", "ConsiderationHasEnergy");
+	AddDecoratorConsideration("OptionChaseDecorator", "ConsiderationSeePlayer");
+	AddOptionConsideration("OptionPatrol", "ConsiderationCannotSeePlayer");
+	AddOptionConsideration("OptionChase", "ConsiderationSeePlayer");
+	AddOptionConsideration("OptionChase", "ConsiderationHasEnergy");
+	AddDecoratorConsideration("OptionInvestigateDecorator", "ConsiderationHearPlayer");
+	AddOptionConsideration("OptionInvestigate", "ConsiderationHasEnergy");
+	AddOptionConsideration("OptionInvestigate", "ConsiderationCannotSeePlayer");
+	AddOptionConsideration("OptionPatrol", "ConsiderationCannotHearPlayer");
 
 
 
 
 
+	// Root: priority order.
+	AddOptionToTreeNode("Root", "OptionRestSeq");
+	AddOptionToTreeNode("Root", "OptionChaseSeq");
+	AddOptionToTreeNode("Root", "OptionInvestigateSeq");
 	AddOptionToTreeNode("Root", "OptionPatrolSeq");
 
+	// Rest sequence.
+	AddOptionToTreeNode("OptionRestSeq", "OptionRestDecorator");
+	AddOptionToTreeNode("OptionRestSeq", "OptionRest");
+
+	// Chase sequence.
+	AddOptionToTreeNode("OptionChaseSeq", "OptionChaseDecorator");
+	AddOptionToTreeNode("OptionChaseSeq", "OptionChase");
+
+	// Investigate sequence.
+	AddOptionToTreeNode("OptionInvestigateSeq", "OptionInvestigateDecorator");
+	AddOptionToTreeNode("OptionInvestigateSeq", "OptionGetInvestigatePath");
+	AddOptionToTreeNode("OptionInvestigateSeq", "OptionInvestigate");
+
+	// Patrol sequence.
 	AddOptionToTreeNode("OptionPatrolSeq", "OptionGetPatrolPath");
 	AddOptionToTreeNode("OptionPatrolSeq", "OptionPatrol");
-	
-
 
 
 
