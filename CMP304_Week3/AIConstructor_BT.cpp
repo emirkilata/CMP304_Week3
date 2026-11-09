@@ -93,6 +93,23 @@ void AIConstructor_BT::DefineActions()
 
 	AddActionByName("ActionInvestigate", investigateFunction);
 
+
+	auto getAlarmPathFunction = [](AIBrainBlackboardBase& bb) -> ActionStatus
+		{
+			AIActor_Guard* actor = static_cast<AIActor_Guard*>(bb.GetActorContext());
+			return actor->GetAlarmPath();
+		};
+
+	AddActionByName("ActionGetAlarmPath", getAlarmPathFunction);
+
+	auto raiseAlarmFunction = [](AIBrainBlackboardBase& bb) -> ActionStatus
+		{
+			AIActor_Guard* actor = static_cast<AIActor_Guard*>(bb.GetActorContext());
+			return actor->RaiseAlarm();
+		};
+
+	AddActionByName("ActionRaiseAlarm", raiseAlarmFunction);
+
 }
 
 void AIConstructor_BT::DefineConsiderations()
@@ -144,6 +161,17 @@ void AIConstructor_BT::DefineConsiderations()
 		};
 
 	AddConsiderationByName("ConsiderationCannotHearPlayer", cCannotHearPlayer);
+
+	auto cShouldRaiseAlarm = [](AIBrainBlackboardBase& bb) -> bool
+		{
+			bool hasRaisedAlarm = bb.GetValue<int>("HasRaisedAlarm") == 1;
+			bool canSeePlayer = bb.GetValue<int>("CanSeePlayer") == 1;
+			bool isRaisingAlarm = bb.GetValue<int>("IsRaisingAlarm") == 1;
+
+			return !hasRaisedAlarm && (canSeePlayer || isRaisingAlarm);
+		};
+
+	AddConsiderationByName("ConsiderationShouldRaiseAlarm", cShouldRaiseAlarm);
 	
 }
 
@@ -168,7 +196,8 @@ void AIConstructor_BT::DefineOptions()
 	AddOptionByName("OptionChase", "ActionChase");
 	AddOptionByName("OptionGetInvestigatePath", "ActionGetInvestigatePath");
 	AddOptionByName("OptionInvestigate", "ActionInvestigate");
-
+	AddOptionByName("OptionGetAlarmPath", "ActionGetAlarmPath");
+	AddOptionByName("OptionRaiseAlarm", "ActionRaiseAlarm");
 
 
 
@@ -186,7 +215,8 @@ void AIConstructor_BT::DefineOptions()
 	AddControlNodeByName("OptionChaseDecorator", AIReasonerBase::Decorator);
 	AddControlNodeByName("OptionInvestigateSeq", AIReasonerBase::Sequence);
 	AddControlNodeByName("OptionInvestigateDecorator", AIReasonerBase::Decorator);
-
+	AddControlNodeByName("OptionAlarmSeq", AIReasonerBase::Sequence);
+	AddControlNodeByName("OptionAlarmDecorator", AIReasonerBase::Decorator);
 
 
 	AddDecoratorConsideration("OptionRestDecorator", "ConsiderationNeedsRest");
@@ -199,6 +229,8 @@ void AIConstructor_BT::DefineOptions()
 	AddOptionConsideration("OptionInvestigate", "ConsiderationHasEnergy");
 	AddOptionConsideration("OptionInvestigate", "ConsiderationCannotSeePlayer");
 	AddOptionConsideration("OptionPatrol", "ConsiderationCannotHearPlayer");
+	AddDecoratorConsideration("OptionAlarmDecorator", "ConsiderationShouldRaiseAlarm");
+	AddOptionConsideration("OptionRaiseAlarm", "ConsiderationHasEnergy");
 
 
 
@@ -206,6 +238,7 @@ void AIConstructor_BT::DefineOptions()
 
 	// Root: priority order.
 	AddOptionToTreeNode("Root", "OptionRestSeq");
+	AddOptionToTreeNode("Root", "OptionAlarmSeq");
 	AddOptionToTreeNode("Root", "OptionChaseSeq");
 	AddOptionToTreeNode("Root", "OptionInvestigateSeq");
 	AddOptionToTreeNode("Root", "OptionPatrolSeq");
@@ -213,6 +246,11 @@ void AIConstructor_BT::DefineOptions()
 	// Rest sequence.
 	AddOptionToTreeNode("OptionRestSeq", "OptionRestDecorator");
 	AddOptionToTreeNode("OptionRestSeq", "OptionRest");
+
+	// Alarm sequence.
+	AddOptionToTreeNode("OptionAlarmSeq", "OptionAlarmDecorator");
+	AddOptionToTreeNode("OptionAlarmSeq", "OptionGetAlarmPath");
+	AddOptionToTreeNode("OptionAlarmSeq", "OptionRaiseAlarm");
 
 	// Chase sequence.
 	AddOptionToTreeNode("OptionChaseSeq", "OptionChaseDecorator");
